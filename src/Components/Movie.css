@@ -1,0 +1,55 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: black;  
+}
+
+.movieItem {
+  
+}
+
+.movieDescription {
+
+}
+
+.list-group {
+
+  display: block;
+  width: auto;
+}
+
+.list-group-item {
+  display: inline-block;
+  
+  margin: 10px;
+  padding: 0;
+}
+
+.movieDescription {
+  
+  font-family: Montserrat;
+  width: fixed;
+}
+
+.title {
+  font-size: 25px;
+}
+
+.ratings span {
+  font-size: 16px;
+  display: block;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.year {
+  display: block;
+}
+
+.overview {
+  overflow: hidden;
+}
