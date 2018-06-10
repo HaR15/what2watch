@@ -11,7 +11,6 @@ class MovieItem extends React.Component {
     fetch(apiStr)
     .then(res => res.json())
     .then(results => {
-      console.log(results)
       if(results.Ratings) {
         this.setState( {
           year: results.Year,

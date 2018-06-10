@@ -6,6 +6,16 @@ body {
   background: black;  
 }
 
+.searchContainer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.searchBtn {
+  width: auto;
+  margin: 5px 115px auto auto;
+}
+
 .movieItem {
   
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import MovieList from './MovieList.js';
-import Search from './Search.js';
 
 class MovieContainer extends React.Component {
   constructor(props) {
@@ -26,7 +25,6 @@ class MovieContainer extends React.Component {
       var result = [];
 
       while (left.length && right.length) {
-          console.log(left[0]);
           if (left[0].vote_average <= right[0].vote_average) {
               result.push(left.shift());
           } else {
@@ -48,16 +46,33 @@ class MovieContainer extends React.Component {
     .then(res => res.json())
     .then(results => {
       const movies = this.mergeSort(results.results).reverse();
-      this.setState( {movies: movies} );
+      this.setState({movies: movies});
+      return movies;
+    }).then(movies => {        
+        var listMovies = [];
+        // just using 8.5 IMDb rating as a test
+        var ratingVal = 8.5;
+        var movies = this.state.movies.map(movie => {
+            var apiStr = "https://www.omdbapi.com/?apikey=2b5c3b4a&t=" + movie.title;
+            // fetch api call to other movie service that provides IMDb and RT ratings
+            fetch(apiStr)
+            .then(res => res.json())
+            .then(results => {
+                if(results.Ratings && results.Ratings[0]) {                    
+                    if(results.Ratings[0].Value.slice(0,3) > ratingVal)
+                        listMovies.push(movie);
+                }
+            })
+        });
+        // Want to set movies property to list of movies retrieved 
+        // with rating > or < ratingVal var
+        // this.setState({movies: listMovies});    
     });
   }
   
-  render() {
+  render() {        
     return (
-      <div className="container">      
-        
-        <MovieList movies={this.state.movies} />
-      </div>
+      <MovieList movies={this.state.movies} />
     );
   }
 }

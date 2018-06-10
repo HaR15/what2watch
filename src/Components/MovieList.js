@@ -33,7 +33,7 @@ class MovieList extends React.Component {
     return (
       <div className="list-group-item movieItem" id={"movieItem" + i} >
         <a style={styles} onClick={handleClick} className="poster" data-toggle="collapse" href={"#movie" + i} aria-expanded="false" aria-controls={"#movie" + i}>
-          <img src={"http://image.tmdb.org/t/p/w154" + movie.poster_path} class="list-group-image"/>
+          <img src={"http://image.tmdb.org/t/p/w154" + movie.poster_path} className="list-group-image"/>
         </a>
         <div className="collapse" id={"movie" + i}>
           <div className="movieDescription card card-body">
@@ -46,11 +46,6 @@ class MovieList extends React.Component {
       </div>
     );
   }
-
-  enlarge() {
-    this.style.width = "100%";
-    this.style.clear = "both"
-  }
   
   render() {
     return (
@@ -59,6 +54,7 @@ class MovieList extends React.Component {
       </div>
     );
   }
+  
 }
 
 export default MovieList;
