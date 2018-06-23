@@ -44,29 +44,38 @@ class MovieContainer extends React.Component {
   componentDidMount() {
     fetch("https://api.themoviedb.org/3/discover/movie?api_key=9557abc26b54d9e0d581d82fa22bcb7e&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=2&with_genres=80")
     .then(res => res.json())
-    .then(results => {
-      const movies = this.mergeSort(results.results).reverse();
-      this.setState({movies: movies});
-      return movies;
-    }).then(movies => {        
-        var listMovies = [];
-        // just using 8.5 IMDb rating as a test
-        var ratingVal = 8.5;
-        var movies = this.state.movies.map(movie => {
+    .then(results => results.results)
+    .then(movies => {        
+        var moviesList = [];
+        var promises = [];
+        // just using this hardcoded IMDb rating as a test
+        var ratingVal = 7.0;
+
+        movies.map(function(movie) {
             var apiStr = "https://www.omdbapi.com/?apikey=2b5c3b4a&t=" + movie.title;
-            // fetch api call to other movie service that provides IMDb and RT ratings
-            fetch(apiStr)
-            .then(res => res.json())
-            .then(results => {
-                if(results.Ratings && results.Ratings[0]) {                    
-                    if(results.Ratings[0].Value.slice(0,3) > ratingVal)
-                        listMovies.push(movie);
-                }
-            })
+            promises.push(                
+                // fetch api call to other movie service that provides IMDb and RT ratings
+                fetch(apiStr)
+                .then(res => res.json())
+                .then(results => {                    
+                    if(results.Ratings) {        
+                        movie.year = results.Year;
+                        movie.imdb = results.Ratings[0] ? results.Ratings[0].Value : "N/A";
+                        movie.rottenTomatoes = results.Ratings[1] ? results.Ratings[1].Value : "N/A";
+                        movie.imdbID = results.imdbID ? results.imdbID : "N/A";
+                        if(results.Ratings[0]) {                    
+                            if(results.Ratings[0].Value.slice(0,3) > ratingVal) {
+                                moviesList.push(movie);
+                            }
+                        }
+                    }                      
+                })
+            );
         });
-        // Want to set movies property to list of movies retrieved 
-        // with rating > or < ratingVal var
-        // this.setState({movies: listMovies});    
+        Promise.all(promises).then(() => {
+            this.setState({movies: moviesList});
+        });
+ 
     });
   }
   
