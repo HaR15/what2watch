@@ -14,7 +14,13 @@ class App extends React.Component {
       year: (new Date).getFullYear,
       genre: "Action",
       imdb: 7.5,
-      rottenTomatoes: 75
+      rottenTomatoes: 75,
+      onClickHandlers: {
+          yearOnClick: this.yearOnClick.bind(this),
+          genreOnClick: this.genreOnClick.bind(this),
+          imdbOnClick: this.imdbOnClick.bind(this),
+          rottenOnClick: this.rottenOnClick.bind(this),
+      }
     };
   }
     
@@ -93,10 +99,30 @@ class App extends React.Component {
     });
   }
 
+  yearOnClick(e) {
+    e.target.parentElement.previousElementSibling.innerText = e.target.innerText;
+  }
+
+  genreOnClick(e) {
+    e.target.parentElement.previousElementSibling.innerText = e.target.innerText;
+  }
+
+  imdbOnClick(e) {
+    e.target.parentElement.previousElementSibling.innerText = e.target.innerText;
+  }
+
+  rottenOnClick(e) {
+    e.target.parentElement.previousElementSibling.innerText = e.target.innerText;
+  }
+
+  suggestionsOnClick(e) {
+    e.target.parentElement.previousElementSibling.innerText = e.target.innerText;
+  }
+
   render() {
     return (
       <div className="container">      
-        <SearchContainer />
+        <SearchContainer onClickHandlers={this.state.onClickHandlers} />
         <MovieList movies={this.state.movies} />
       </div>
     );  

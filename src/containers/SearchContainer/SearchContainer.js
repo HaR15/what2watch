@@ -1,5 +1,6 @@
 import React from 'react';
 import Filter from '../../components/Filter/Filter.js';
+import SearchContainerStyle from './SearchContainer.css';
 
 class SearchContainer extends React.Component {	
 
@@ -19,7 +20,7 @@ class SearchContainer extends React.Component {
 		for(var i = d.getFullYear(); i >= 2006; i--) {
 			years.push(i);
 		}
-		return {name: "Year", values: years};
+		return {name: "Year", values: years, onClickHandler: this.props.onClickHandlers.yearOnClick};
 	}
 
 
@@ -29,7 +30,7 @@ class SearchContainer extends React.Component {
 		var IMDbRatingFilter = this.constructIMDbFilter();
 		var RTRatingFilter = this.constructRTFilter();
 		genreFilter.then(genres => {	
-			this.setState({filters: [yearFilter, {name:"Genre", values: genres}, IMDbRatingFilter, RTRatingFilter ]});
+			this.setState({filters: [yearFilter, {name:"Genre", values: genres, onClickHandler: this.props.onClickHandlers.genreOnClick}, IMDbRatingFilter, RTRatingFilter ]});
 		});		
 	}
 
@@ -40,16 +41,9 @@ class SearchContainer extends React.Component {
 		.then(results => {
 			results.genres.map(genre => {
 				genres.push(genre.name)
-			});
-			// this.setState({genres: genres});			
-			return genres;
-			//console.log(results.genres);			
+			});	
+			return genres;		
 		});
-		// var ratings = [];
-		// for(var i = 10; i >= 1; i -= 1) {
-		// 	ratings.push(i + "+");
-		// }
-		// return {name: "IMDb Rating", values: ratings}
 	}
 	
 	constructIMDbFilter() {
@@ -57,7 +51,7 @@ class SearchContainer extends React.Component {
 		for(var i = 10; i >= 1; i -= 1) {
 			ratings.push(i + "+");
 		}
-		return {name: "IMDb Rating", values: ratings};
+		return {name: "IMDb Rating", values: ratings, onClickHandler: this.props.onClickHandlers.imdbOnClick};
 	}
 
 	constructRTFilter() {
@@ -65,7 +59,7 @@ class SearchContainer extends React.Component {
 		for(var i = 100; i >= 1; i -= 10) {
 			ratings.push(i + "+");
 		}
-		return {name: "RottenTomatoes (%)", values: ratings};
+		return {name: "RottenTomatoes (%)", values: ratings, onClickHandler: this.props.onClickHandlers.rottenOnClick};
 	}
 
 	makeSuggestion(str) {
@@ -75,8 +69,6 @@ class SearchContainer extends React.Component {
 		.then(res => res.json())
 		.then(results => {
 			this.setState( {movies: results.results} );
-			//console.log(results.results);		
-
 		});
 	}
 
@@ -109,17 +101,10 @@ class SearchContainer extends React.Component {
 							</button>
 						</div>
 					</div>
-					{/*<Filter filter={this.state.filters[0]} filterValues={this.state.filterStrings}/>
-					<Filter filter={this.state.filters[0]} filterValues={this.state.filterStrings}/>
-					<Filter filter={"IMDb Rating"} filterValues={this.state.filterStrings}/>
-					<Filter filter={"Rotten tomatoes"} filterValues={this.state.filterStrings}/>*/}					
 					<div style={this.searchBtnStyle} className="col-sm-4">						
 						<button className="btn btn-danger" onClick={this.makeSuggestion.bind(this, 'hi')}>Search</button>
 					</div>
 				</div>
-				{/*<div className="row">
-					
-				</div>				*/}
 			</div>
 		);
 	}

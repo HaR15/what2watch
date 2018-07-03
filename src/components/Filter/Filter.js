@@ -16,11 +16,6 @@ class Filter extends React.Component {
 			filterValues: this.props.filter.values, 
 			filterValue: this.props.filter.values[0]
 		});
-		// fetch("")
-		// .then(res => res.json)
-		// .then(results => {
-				
-		// });
 	}
 
 	changeOption(e) {
@@ -56,7 +51,8 @@ class Filter extends React.Component {
 							{this.state.filterValue}							
 						</button>
 						<div style={this.ddMenuStyle} className="dropdown-menu">
-							{this.state.filterValues.map(val => <button className="dropdown-item" onClick={this.changeOption.bind(this)}>{val}</button>)}																
+							{/*{this.state.filterValues.map(val => <button className="dropdown-item" onClick={this.changeOption.bind(this)}>{val}</button>)}																*/}
+							{this.state.filterValues.map(val => <button className="dropdown-item" onClick={this.props.filter.onClickHandler}>{val}</button>)}																
 						</div>
 					</div>						
 				</div>					
