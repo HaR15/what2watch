@@ -1,5 +1,5 @@
 import React from 'react';
-import Filter from './Filter.js';
+import Filter from '../../components/Filter/Filter.js';
 
 class SearchContainer extends React.Component {	
 

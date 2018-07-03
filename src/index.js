@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import './Components/Movie.css'
-import App from './Components/App/App.js';
+import './Movie.css'
+import PageContainer from './containers/PageContainer/PageContainer.js';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<PageContainer />, document.getElementById('root'));
 registerServiceWorker();
