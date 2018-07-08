@@ -11,8 +11,9 @@ class App extends React.Component {
 
     this.state = {
       movies: [],
-      year: (new Date).getFullYear,
-      genre: "Action",
+      genresMap: null,
+      year: (new Date).getFullYear(),
+      genre: 80,
       imdb: 7.5,
       rottenTomatoes: 75,
       onClickHandlers: {
@@ -26,6 +27,7 @@ class App extends React.Component {
     
   componentDidMount() {
     this.displayMovies();
+    this.mapGenres(this.getGenresPromise());
   }
 
   mergeSort(arr) {
@@ -59,24 +61,54 @@ class App extends React.Component {
       return result;
   } 
 
-  displayMovies() {
-    fetch("https://api.themoviedb.org/3/discover/movie?api_key=9557abc26b54d9e0d581d82fa22bcb7e&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=2&with_genres=80")
+  getGenresPromise() {
+      return fetch("https://api.themoviedb.org/3/genre/movie/list?api_key=9557abc26b54d9e0d581d82fa22bcb7e&language=en-US")
+      .then(res => res.json())
+      .then(jsonData => jsonData.genres);
+  }
+
+  mapGenres(genresPromise) {
+   genresPromise
+   .then(genres => {
+        var genresMap = {};
+        genres.map(genre => {
+            genresMap[genre.name] = genre.id;
+        });
+        return genresMap;
+    }).then(genresMap => this.setState({genresMap: genresMap}));
+  }
+
+  displayMovies(year, genre, imdb, rottenTomatoes) {
+    var apiString = "https://api.themoviedb.org/3/discover/movie?api_key=9557abc26b54d9e0d581d82fa22bcb7e&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+    apiString += year ? "&primary_release_year=" + year : "";
+    apiString += genre ? "&with_genres=" + genre : "";
+    console.log(apiString);
+    fetch(apiString)
     .then(res => res.json())
     .then(results => results.results)
-    .then(movies => {        
+    .then(movies => {
         var moviesList = [];
         var promises = [];
         // just using this hardcoded IMDb rating as a test
-        var imdb = this.state.imdb;
-        var rottenTomatoes = this.state.rottenTomatoes;
+        var imdb = imdb ? imdb : this.state.imdb;
+        var rottenTomatoes = rottenTomatoes ? rottenTomatoes : this.state.rottenTomatoes;
+        var timeout = function(ms, promise) {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    reject(new Error("timeout"))
+                }, ms);
+                promise.then(resolve, reject)
+            });
+        };
 
         movies.map(function(movie) {
-            var apiStr = "https://www.omdbapi.com/?apikey=2b5c3b4a&t=" + movie.title;
+            var apiStr = "https://www.omdbapi.com/?apikey=2b5c3b4a&t=" + movie.title + "&r=jsonp";
             promises.push(                
                 // fetch api call to other movie service that provides IMDb and RT ratings
-                fetch(apiStr)
+                timeout(500, fetch(apiStr))
                 .then(res => res.json())
                 .then(results => {                    
+                            console.log(moviesList);        
                     if(results.Ratings) {        
                         movie.year = results.Year;
                         movie.imdb = results.Ratings[0] ? results.Ratings[0].Value : "N/A";
@@ -89,10 +121,14 @@ class App extends React.Component {
                             }
                         }
                     }                      
+                }).catch(function(error) {
+                    // might be a timeout error
+                    console.log('timeout error', error);
                 })
             );
         });
         Promise.all(promises).then(() => {
+            console.log(moviesList);
             this.setState({movies: moviesList});
         });
  
@@ -101,18 +137,26 @@ class App extends React.Component {
 
   yearOnClick(e) {
     e.target.parentElement.previousElementSibling.innerText = e.target.innerText;
+    this.setState({year: e.target.innerText});
+    this.displayMovies(e.target.innerText, this.state.genresMap[this.state.genre], this.state.imdb, this.state.rottenTomatoes);
   }
 
   genreOnClick(e) {
     e.target.parentElement.previousElementSibling.innerText = e.target.innerText;
+    this.setState({genre: this.state.genresMap[e.target.innerText]});
+    this.displayMovies(this.state.year, this.state.genresMap[e.target.innerText], this.state.imdb, this.state.rottenTomatoes);
   }
 
   imdbOnClick(e) {
     e.target.parentElement.previousElementSibling.innerText = e.target.innerText;
+    this.setState({imdb: e.target.innerText});
+    this.displayMovies(this.state.year, this.state.genre, e.target.innerText.slice(0, -1), this.state.rottenTomatoes);
   }
 
   rottenOnClick(e) {
     e.target.parentElement.previousElementSibling.innerText = e.target.innerText;
+    this.setState({rottenTomatoes: e.target.innerText});
+    this.displayMovies(this.state.year, this.state.genre, this.state.imdb, e.target.innerText.slice(0, -1));
   }
 
   suggestionsOnClick(e) {
