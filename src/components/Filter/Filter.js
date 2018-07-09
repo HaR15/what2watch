@@ -11,10 +11,15 @@ class Filter extends React.Component {
 	}
 
 	componentDidMount() {
+		var filterValue = this.props.filter.values[0];
+		if(this.props.filter.name.indexOf("IMDb") > -1)
+			filterValue = "7+";
+		if(this.props.filter.name.indexOf("RottenTomatoes") > -1)
+			filterValue = "70+";
 		this.setState({
 			filterName: this.props.filter.name, 
 			filterValues: this.props.filter.values, 
-			filterValue: this.props.filter.values[0]
+			filterValue: filterValue
 		});
 	}
 
