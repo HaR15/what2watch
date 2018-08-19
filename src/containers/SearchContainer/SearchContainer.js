@@ -59,7 +59,7 @@ class SearchContainer extends React.Component {
 		for(var i = 100; i >= 1; i -= 10) {
 			ratings.push(i + "+");
 		}
-		return {name: "RottenTomatoes (%)", values: ratings, onClickHandler: this.props.onClickHandlers.rottenOnClick};
+		return {name: "Rotten Tomatoes (%)", values: ratings, onClickHandler: this.props.onClickHandlers.rottenOnClick};
 	}
 
 	makeSuggestion(str) {
@@ -94,16 +94,7 @@ class SearchContainer extends React.Component {
 						<Filter filter={filter} />
 					)}
 					<div className="input-group-btn col-sm-2">
-						<div>
-							<h6 style={this.labelStyle}># of Suggestions</h6>
-							<button style={this.buttonStyle} type="button" id="filterValue" className="btn btn-primary">
-								Hello
-							</button>
-						</div>
-					</div>
-					<div style={this.searchBtnStyle} className="col-sm-4">						
-						<button className="btn btn-danger" onClick={this.makeSuggestion.bind(this, 'hi')}>Search</button>
-					</div>
+					</div>					
 				</div>
 			</div>
 		);

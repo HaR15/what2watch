@@ -11,10 +11,15 @@ class Filter extends React.Component {
 	}
 
 	componentDidMount() {
+		var filterValue = this.props.filter.values[0];
+		if(this.props.filter.name.indexOf("IMDb") > -1)
+			filterValue = "7+";
+		if(this.props.filter.name.indexOf("RottenTomatoes") > -1)
+			filterValue = "70+";
 		this.setState({
 			filterName: this.props.filter.name, 
 			filterValues: this.props.filter.values, 
-			filterValue: this.props.filter.values[0]
+			filterValue: filterValue
 		});
 	}
 
@@ -46,7 +51,7 @@ class Filter extends React.Component {
 		return(
 				<div className="input-group-btn col-sm-2">
 					<div style={this.filterDivStyle}>
-						<h6 style={this.labelStyle}>{this.state.filterName}</h6>
+						<h6 style={this.labelStyle}>{this.state.filterName.toUpperCase()}</h6>
 						<button style={this.buttonStyle} type="button" id="filterValue" className="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							{this.state.filterValue}							
 						</button>
