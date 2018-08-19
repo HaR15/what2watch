@@ -1,2 +1,2 @@
 # what2watch #
-A movie suggester for the indecisive among us.
+A movie suggester built with React.js for the indecisive among us.
