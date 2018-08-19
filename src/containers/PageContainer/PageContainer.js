@@ -142,11 +142,13 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="container">      
+      <div className="container">
+        <h1 style={{'font-size': '60px', 'color': 'gold', 'text-align': 'center'}}>what2watch</h1>
+        <h4 style={{'color': 'firebrick', 'text-align': 'center', 'font-style': 'italic'}}>A movie suggester for the indecisive amongst us.</h4>      
         <SearchContainer onClickHandlers={this.state.onClickHandlers} />
         <MovieList movies={this.state.movies} />
       </div>
-    );  
+    );
   }
 }
 

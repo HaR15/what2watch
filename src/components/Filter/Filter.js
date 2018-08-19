@@ -51,7 +51,7 @@ class Filter extends React.Component {
 		return(
 				<div className="input-group-btn col-sm-2">
 					<div style={this.filterDivStyle}>
-						<h6 style={this.labelStyle}>{this.state.filterName}</h6>
+						<h6 style={this.labelStyle}>{this.state.filterName.toUpperCase()}</h6>
 						<button style={this.buttonStyle} type="button" id="filterValue" className="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							{this.state.filterValue}							
 						</button>
